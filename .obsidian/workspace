@@ -1,0 +1,152 @@
+{
+  "main": {
+    "id": "184f21e319a59294",
+    "type": "split",
+    "children": [
+      {
+        "id": "b5c81acfc1a01a51",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "Introductory/Chapter 11 Writing Automated Tests.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "46c36135660e757c",
+    "type": "split",
+    "children": [
+      {
+        "id": "e1d3584f13d903a7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b58e4770ea4e6256",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "3ac991ba3be5eab1",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#DefiningGenericFunction",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "f1119425fe01c16f",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 310
+  },
+  "right": {
+    "id": "901cfbd22bf8e632",
+    "type": "split",
+    "children": [
+      {
+        "id": "df67bcd5f93de577",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7d98ea7f07c7912f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Introductory/Chapter 11 Writing Automated Tests.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "4a1668e885b34103",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Introductory/Chapter 11 Writing Automated Tests.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "a8b064595c888a16",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "f488f028e41f2c99",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Introductory/Chapter 11 Writing Automated Tests.md"
+              }
+            }
+          },
+          {
+            "id": "2c44757c1c577983",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 354.5
+  },
+  "active": "b5c81acfc1a01a51",
+  "lastOpenFiles": [
+    "Introductory/Chapter 5 Using Structs to Structure Related Data.md",
+    "Introductory/Chapter 11 Writing Automated Tests.md",
+    "Introductory/Chapter 10 Generic Types, Traits, and Lifetimes.md",
+    "Introductory/Chapter 7 Managing Growing Projects with Packages, Crates, and Modules.md",
+    "Introductory/Chapter 9 Error Handling.md",
+    "Introductory/Chapter 3 Common Programming Concepts.md",
+    "Introductory/Chapter 4 Understanding Ownership.md",
+    "Introductory/Chapter 6 Enums and Pattern Matching.md",
+    "Introductory/Chapter 1 Intro.md",
+    "Introductory/Chapter 2 Programming a Guessing Game.md"
+  ]
+}
