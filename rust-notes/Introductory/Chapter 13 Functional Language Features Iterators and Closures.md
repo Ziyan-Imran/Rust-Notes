@@ -111,7 +111,77 @@ Functions, however, are not able to capture their environment in this way.
 
 ## Closure Type Inference and Annotation
 
-Closures don't usually require you to annotate the types of the parameters or the return value like `fn` functions do. Type annotations are required on functions because types are part of an explicit interface exposed to the users. Strict rigidity is important to make sure functions operate in an expected way. Closures aren't used in an exposed interface. They're stored in variables and used without naming them or exposing them to users. 
+Differences between Closures and Functions
 
 Closures:
+- don't usually require you to annotate the types of the parameters or the return value
+- not used in an exposed interface to the users
+- stored in variables and used without naming them or exposing them to users
 - typically short and relevant only within a narrow context 
+
+Within this limited context, the compiler can infer the types of the parameters and the return type (though there are rare cases where the compiler needs closure type annotations too).
+
+Like with variables, we can add type annotations if we want to increase explicitness and clarity at the cost of being more verbose. Here's an example on how to annotate a closure. In the following example, we're defining a closure and storing it in a variable rather than defining the closure in the spot we pass it as an argument as we did above.
+
+```rust
+use std::thread;
+use std::time::Duration;
+
+fn generate_workout(intensity: u32, random_number: u32) {
+    let expensive_closure = |num: u32| -> u32 {
+        println!("calculating slowly...");
+        thread::sleep(Duration::from_secs(2));
+        num
+    };
+
+    if intensity < 25 {
+        println!("Today, do {} pushups!", expensive_closure(intensity));
+        println!("Next, do {} situps!", expensive_closure(intensity));
+    } else {
+        if random_number == 3 {
+            println!("Take a break today! Remember to stay hydrated!");
+        } else {
+            println!(
+                "Today, run for {} minutes!",
+                expensive_closure(intensity)
+            );
+        }
+    }
+}
+
+fn main() {
+    let simulated_user_specified_value = 10;
+    let simulated_random_number = 7;
+
+    generate_workout(simulated_user_specified_value, simulated_random_number);
+}
+
+```
+
+With type annotations, the syntax of closures looks more similar to functions. Below is an example of defining a function that adds 1 to its parameter and a closure that has the same behavior as a comparison. 
+
+```rust
+fn  add_one_v1   (x: u32) -> u32 { x + 1 }  // function definition
+let add_one_v2 = |x: u32| -> u32 { x + 1 }; // fully annotated closure def
+let add_one_v3 = |x|             { x + 1 }; // closure without type annotations
+let add_one_v4 = |x|               x + 1  ; // removed optional brackets
+```
+
+The `add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be able to compile because the types will be inferred from their usage. Similar to `let v = Vec::new();` needing either type annotations or values of some type to inserted into the `Vec` for Rust to be able to infer the type. 
+
+For closure definitions, the compiler will infer one concrete type for each of their parameters and for their return value. The below example shows the definition of a short closure that just returns the value it receives as a parameter. Since there are no type annotations, we can call the closure with any type which we do with `String`. If we try to then call it with an integer afterwards, the code will error.
+
+```rust
+fn main() {
+    let example_closure = |x| x;
+
+    let s = example_closure(String::from("hello")); // compiler infers x 
+												    // to be of type String
+    let n = example_closure(5); // compiler panics because an int was provided
+}
+```
+
+First time we call `example_closure`, compiler infers that `x` and the return type of the closure to be `String`. The types are *locked* into the closure, and we get a type error when we try to use a different type with the same closure.
+
+## Capturing References or Moving Ownership
+
