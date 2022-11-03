@@ -134,9 +134,9 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 271.5
   },
-  "active": "fd756a21f0178d15",
+  "active": "5ae0f0eda62d7354",
   "lastOpenFiles": [
     "Chapter 12 An IO Project - Building A command Line Program.md",
     "Chapter 13 Functional Language Features Iterators and Closures.md",
