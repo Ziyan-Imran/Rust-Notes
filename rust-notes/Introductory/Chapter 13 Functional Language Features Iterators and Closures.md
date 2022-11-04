@@ -185,3 +185,94 @@ First time we call `example_closure`, compiler infers that `x` and the return ty
 
 ## Capturing References or Moving Ownership
 
+Closures can capture values from their environment in *three* ways which directly map to the three ways a function can take a parameter:
+- Borrowing immutably 
+- Borrowing mutably
+- Taking ownership
+
+### Borrowing Immutably 
+The following example defines a closure that captures an immutable reference to the vector named `list` because it only needs an immutable reference to print the value. It also illustrates that a variable can bind to a closure definition, and can be later called by using the variable name and parentheses as if the variable name was a function:
+
+```rust
+fn main() {
+    let list = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+
+    let only_borrows = || println!("From closure: {:?}", list);
+
+    println!("Before calling closure: {:?}", list);
+    only_borrows();
+    println!("After calling closure: {:?}", list);
+}
+```
+
+
+Since we can have multiple immutable references to `list` at the same time, `list` is still accessible from the code before the closure definition, after the closure definition but before the closure is called, and after the closure is called. Running the code produces the following:
+
+```shell
+$ cargo run
+   Compiling closure-example v0.1.0 (file:///projects/closure-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43s
+     Running `target/debug/closure-example`
+Before defining closure: [1, 2, 3]
+Before calling closure: [1, 2, 3]
+From closure: [1, 2, 3]
+After calling closure: [1, 2, 3]
+```
+
+### Borrowing Mutably
+Changed the closure body so that it adds an element to the `list` vector. Closer now captures a mutable reference:
+
+```rust
+fn main() {
+    let mut list = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+
+    let mut borrows_mutably = || list.push(7);
+
+    borrows_mutably();
+    println!("After calling closure: {:?}", list);
+}
+```
+
+Running the code produces the following:
+```bash
+$ cargo run
+   Compiling closure-example v0.1.0 (file:///projects/closure-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43s
+     Running `target/debug/closure-example`
+Before defining closure: [1, 2, 3]
+After calling closure: [1, 2, 3, 7]
+```
+
+There's no longer a `println!()` between the definition and the call of the `borrow_mutably` closure.
+When `borrows_mutably` is defined, it captures a mutable reference to `list`. We don't use the closure again after the closure is called, so the mutable borrow ends.
+
+Between the closure definition and the closure call, an immutable borrow to print isn't allowed because no other borrows are allowed when there's a mutable borrow. 
+
+### Taking Ownership
+For a closure to take ownership of the values it uses in an environment, just use the `move` keyword before the parameter list.
+
+This technique is useful when passing a closure to a new thread to move the data so that it's owned by the new thread. Threads will be discussed more in [[Chapter 16 Fearless Concurrency]], but for now we'll explore spawning a new thread using a closure that needs the `move` keyword.
+
+```rust
+use std::thread;
+
+fn main() {
+    let list = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+
+    thread::spawn(move || println!("From thread: {:?}", list))
+        .join()
+        .unwrap();
+}
+```
+
+Explaining the Code:
+1) We spawn a new thread giving the thread a closure to run as an arguments
+	1) The closure prints out the list
+	2) The closure only captured `list` using an immutable reference because that's the least amount of access to `list` needed to print it
+	3) We need to specify that `list` should be moved into the closure by putting the `move` keyword  at the beginning of the closure definitions
+2) The new thread might finish before the rest of the main thread finishes, or the main thread might finish finish first. 
+	1) If the main thread maintained ownership of `list` but ended before the new thread did and dropped `list`, the immutable reference would be invalid
+3) The compile requires that `list` be moved into the closure given to the new thread so the reference will be valid. 
