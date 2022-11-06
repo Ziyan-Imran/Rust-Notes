@@ -28,7 +28,7 @@ Scenario: We have a t-shit company that gives away an exclusive shirt to someone
 
 How to Implement: We'll use an enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the # of colors). The company's inventory will have a struct called `Inventory` taht has a field named `shirts` that contains a `Vec<ShirtColor>` representing the colors currently in stock. The method `giveaway` defined on `Inventory` gets the optional shirt color preference and returns the shirt color the person will get.
 
-```rust
+```run-rust
 #[derive(Debug, PartialEq, Copy, Clone)]
 enum ShirtColor {
     Red,
@@ -84,6 +84,7 @@ fn main() {
 ```
 
 
+
 The `giveaway` method uses a closure. 
 - We get the user preference as a parameter of type `Option<ShirtColor>`
 	- `unwrap_or_else` is called on `user_preference`
@@ -123,7 +124,7 @@ Within this limited context, the compiler can infer the types of the parameters 
 
 Like with variables, we can add type annotations if we want to increase explicitness and clarity at the cost of being more verbose. Here's an example on how to annotate a closure. In the following example, we're defining a closure and storing it in a variable rather than defining the closure in the spot we pass it as an argument as we did above.
 
-```rust
+```run-rust
 use std::thread;
 use std::time::Duration;
 
@@ -157,6 +158,7 @@ fn main() {
 }
 
 ```
+
 
 With type annotations, the syntax of closures looks more similar to functions. Below is an example of defining a function that adds 1 to its parameter and a closure that has the same behavior as a comparison. 
 
@@ -255,7 +257,7 @@ For a closure to take ownership of the values it uses in an environment, just us
 
 This technique is useful when passing a closure to a new thread to move the data so that it's owned by the new thread. Threads will be discussed more in [[Chapter 16 Fearless Concurrency]], but for now we'll explore spawning a new thread using a closure that needs the `move` keyword.
 
-```rust
+```run-rust
 use std::thread;
 
 fn main() {
@@ -267,6 +269,7 @@ fn main() {
         .unwrap();
 }
 ```
+
 
 Explaining the Code:
 1) We spawn a new thread giving the thread a closure to run as an arguments
@@ -316,4 +319,13 @@ Explaining the Code:
 	1) Type `T` is also the return type of the `unwrap_or_else` function: code that calls `unwrap_or_else` on an `Option<String>` will return a `String`
 2) `unwrap_or_else` has the additional generic type parameter `F`. 
 	1) The `F` type is the type of the parameter named `f`, which is the **closure** we provide when calling `unwrap_or_else`. 
-3) The trait bound specified on the generic 
+3) The trait bound specified on the generic type `F` is `FnOnce() -> T`
+	1) Means `F` must be able to be called once, take no arguments, and return a `T`. 
+	2) Using `FnOnce` in the trait bound expresses the constraint that `unwrap_or_else` is only going to call `f` at most one time.
+	3) In the body, we see that if the `Option` is `Some`, `f` won't be called. If the `Option` is `None`, `f` will be called once. 
+	4) All closures implement `FnOnce`, `unwrap_or_else` will then accept most different kinds of closures and is as flexible as it can be. 
+
+> Functions can implement all three of the `Fn` traits too. If what we want to do doesn't require capturing a value from the environment, we can use the name of a function rather than a closure where we need something that implements one of the `Fn` traits. 
+> For example) On an `Option<Vec<T>>` value, we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the value if `None`. 
+
+Another standard library method to look at: `sort_by_key`:

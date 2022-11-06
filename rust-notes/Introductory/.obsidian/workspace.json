@@ -136,6 +136,14 @@
               "type": "git-view",
               "state": {}
             }
+          },
+          {
+            "id": "9e893234adf9b4e9",
+            "type": "leaf",
+            "state": {
+              "type": "code-execute-manage-executors",
+              "state": {}
+            }
           }
         ],
         "currentTab": 4
