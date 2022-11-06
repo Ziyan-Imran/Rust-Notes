@@ -1,4 +1,21 @@
 {
   "things-style@@h3-color": "#0BE91F",
-  "things-style@@floating-button-off": false
+  "things-style@@floating-button-off": false,
+  "sanctum@@color-accent-rgb-l": "99, 149, 156",
+  "sanctum@@active-line-accent": "transparent",
+  "sanctum@@aside-border": false,
+  "sanctum@@code-lines": false,
+  "sanctum@@code-label": true,
+  "sanctum@@code-border": true,
+  "sanctum@@h1-line": true,
+  "sanctum@@h2-line": true,
+  "sanctum@@h3-line": true,
+  "sanctum@@h4-line": true,
+  "sanctum@@nav-folder-indicators": true,
+  "sanctum@@colorful-active-nav": false,
+  "sanctum@@color-accent-rgb-d": "246, 141, 69",
+  "sanctum@@hide-vault-title": false,
+  "sanctum@@wrap-nav-titles": false,
+  "sanctum@@heading-outline": "#",
+  "things-style@@default-font-color": false
 }

@@ -275,4 +275,45 @@ Explaining the Code:
 	3) We need to specify that `list` should be moved into the closure by putting the `move` keyword  at the beginning of the closure definitions
 2) The new thread might finish before the rest of the main thread finishes, or the main thread might finish finish first. 
 	1) If the main thread maintained ownership of `list` but ended before the new thread did and dropped `list`, the immutable reference would be invalid
-3) The compile requires that `list` be moved into the closure given to the new thread so the reference will be valid. 
+3) The compiler requires that `list` be moved into the closure given to the new thread so the reference will be valid. 
+
+## Moving Captured Values Out of Closures and the Fn Traits
+
+After the closure has captured a reference or captured ownership of a value from the environment where the closure is defined (this tells what is moved *into* the closure), the code in the *body* of the closure defines what happens to the references or values when the closure is evaluated later (this tells what is moved *out* of the closure).
+
+A closure body can do the following:
+- Move a captured value out of the closure
+- Mutate the captured value
+- neither move nor mutate the value
+- capture nothing from the environment to begin with
+
+The way a closure captures and handles environmental values affects which traits the closure implements. Traits are how functions and structs can specify what kinds of closures they can use. Closures automatically implement one, two, or all three of then `Fn` traits in an additive fashion, depending on how the closure's body handles the values:
+1) `FnOnce` : applies to closures that can be called once
+	1) All closures implement at least this trait, because all closures can be called. 
+	2) A closure that moves captured values out of its body will only implement `FnOnce` and none of the other `Fn` traits because it can only be called once
+2) `FnMut` : applies to closures that don't move captured values out of their body, but that might mutate the captured values. 
+	1) Can be called more than once.
+3) `Fn` applies to closures that don't move captured values out of their body and that don't mutate captured values, as well as closures that capture nothing from their environment.
+	1) Can be called more than once without mutating their environment, which is important in cases such as calling a closure multiple times concurrently.
+
+We'll go through the definition of the `unwrap_or_else` method on `Option<T>`:
+```rust
+impl<T> Option<T> {
+    pub fn unwrap_or_else<F>(self, f: F) -> T
+    where
+        F: FnOnce() -> T
+    {
+        match self {
+            Some(x) => x,
+            None => f(),
+        }
+    }
+}
+```
+
+Explaining the Code:
+1) `T` is the generic type representing the type of the value in the `Some` variant of an `Option`. 
+	1) Type `T` is also the return type of the `unwrap_or_else` function: code that calls `unwrap_or_else` on an `Option<String>` will return a `String`
+2) `unwrap_or_else` has the additional generic type parameter `F`. 
+	1) The `F` type is the type of the parameter named `f`, which is the **closure** we provide when calling `unwrap_or_else`. 
+3) The trait bound specified on the generic 
