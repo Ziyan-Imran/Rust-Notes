@@ -17,5 +17,8 @@
   "sanctum@@hide-vault-title": false,
   "sanctum@@wrap-nav-titles": false,
   "sanctum@@heading-outline": "#",
-  "things-style@@default-font-color": false
+  "things-style@@default-font-color": false,
+  "obsidian-execute-code@@code-error-text-color": "#F53D3D",
+  "obsidian-execute-code@@use-custom-error-color": true,
+  "obsidian-execute-code@@use-custom-output-color": true
 }

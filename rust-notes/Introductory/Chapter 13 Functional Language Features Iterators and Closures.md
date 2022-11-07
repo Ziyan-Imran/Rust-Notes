@@ -328,4 +328,97 @@ Explaining the Code:
 > Functions can implement all three of the `Fn` traits too. If what we want to do doesn't require capturing a value from the environment, we can use the name of a function rather than a closure where we need something that implements one of the `Fn` traits. 
 > For example) On an `Option<Vec<T>>` value, we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the value if `None`. 
 
-Another standard library method to look at: `sort_by_key`:
+Another standard library method to look at: 
+`sort_by_key` which is defined on slices and we'll look to see how it differs from `unwrap_or_else` and why `sort_by_key` uses `FnMut` instead of `FnOnce` for the trait bound.
+The closure gets one argument in the form of a reference to the current item in the slice being considered, and returns a value of type `K` that can be ordered. This is useful when you want to sort a slice by a particular attribute of each item. 
+
+The below code shows we have a list of `Rectangle` instances and we use `sort_by_key` to order them by their `width` attribute from low to high:
+
+```run-rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    list.sort_by_key(|r| r.width);
+    println!("{:#?}", list);
+}
+
+```
+
+The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls the closure multiple times: once for each item in the slice. The closure `|r| r.width`doesn't capture, mutate, nor move out anything from its environment, so it meets the trait bound requirements.
+
+As a contrast, the next code shows an example of a closure that implements just the `FnOnce` trait, because it moves a value out of the environment. The compiler won't let us use this closure with `sort_by_key`:
+
+```run-rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    let mut sort_operations = vec![];
+    let value = String::from("by key called");
+
+    list.sort_by_key(|r| {
+        sort_operations.push(value);
+        r.width
+    });
+    println!("{:#?}", list);
+}
+
+```
+
+Explaining the Code:
+- This is a needlessly complex and incorrect way to try and count the number of times `sort_by_key` gets called when sorting `list`. 
+	- The code attempts this via counting by pushing `value` (a `String` from the closure's environment) into the `sort_operations` vector. 
+	- Closure captures `value` then moves `value` out of the closure by transferring ownership of `value` to the `sort_operations` vector. 
+		- This closure can only be called once; trying to call it a second time wouldn't work because `value` would no longer be in the environment to be pushed into `sort_operations`
+		- As a result, this closure only implements `FnOnce`
+- Compiling the code produces an error
+	- Error point to the line in the closure body that moves `value` out of the environment. 
+		- To fix this, change the closure body so that it doesn't move values out of the environment
+		- To count the # of times `sort_by_key` is called, keeping a counter in the environment and incrementing its value in the closure body is a more straightforward way to calculate that
+
+The following closure code works with `sort_by_key` because it is only capturing a mutable reference to the `num_sort_operations` counter and can therefore be called more than once:
+```run-rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
+
+    let mut num_sort_operations = 0;
+    list.sort_by_key(|r| {
+        num_sort_operations += 1;
+        r.width
+    });
+    println!("{:#?}, sorted in {num_sort_operations} operations", list);
+}
+
+```
+
+`Fn` traits are important when defining or using functions/types that make use of closures. The next section will be about iterators. Many iterator methods take closure arguments.
+

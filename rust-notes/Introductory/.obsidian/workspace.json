@@ -150,9 +150,9 @@
       }
     ],
     "direction": "horizontal",
-    "width": 360.5
+    "width": 326.5
   },
-  "active": "7288f68d39a8cadf",
+  "active": "af8a56c3244f0512",
   "lastOpenFiles": [
     "Chapter 13 Functional Language Features Iterators and Closures.md",
     "Chapter 16 Fearless Concurrency.md",
