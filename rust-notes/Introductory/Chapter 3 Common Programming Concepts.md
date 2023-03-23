@@ -72,7 +72,7 @@ Constants are valid for the entire time a program runs, within the scope they we
 
 
 ### Shadowing
-As we saw in [[Chapter 2 Programming a Guessing Game]], you can declare a new variable with the same name as a previous variable. We say that the first variable is [shadowed] by the second, which means taht the second variable is what the compiler will see when you use the name of the variable. In effect, the second variable overshadows the first, taking any uses of the variable name to itself until it itself is shadowed or the scope ends. 
+As we saw in [[Chapter 2 Programming a Guessing Game]], you can declare a new variable with the same name as a previous variable. We say that the first variable is [shadowed] by the second, which means that the second variable is what the compiler will see when you use the name of the variable. In effect, the second variable overshadows the first, taking any uses of the variable name to itself until it itself is shadowed or the scope ends. 
 
 An example of using shadowing:
 ```rust
@@ -104,9 +104,9 @@ Output of the above shadowing code.
 The value of x in the inner scope is: 12
 The value of x is: 6
 ```
-Shadowing is different from marking a variable as `mut`, because we'll get a compile-time error if we accidentally try to reassign to this variable without using the `let` keyword.  By using `let`, we can perform a few transofrmations on a value but have the variable be immutable after those transformations have been completed.
+Shadowing is different from marking a variable as `mut`, because we'll get a compile-time error if we accidentally try to reassign to this variable without using the `let` keyword.  By using `let`, we can perform a few transformations on a value but have the variable be immutable after those transformations have been completed.
 
-The other difference between `mut` and [shadowing] is that we can change the *type* of a value but reuse the same name due to us essentially making a new variable. Here's an exmaple of switching between a `String` and a `Number` type. The example given is asking the user to show how many spaces they want in between some text via inputting space characters, and then we want to store that input as a number:
+The other difference between `mut` and [shadowing] is that we can change the *type* of a value but reuse the same name due to us essentially making a new variable. Here's an example of switching between a `String` and a `Number` type. The example given is asking the user to show how many spaces they want in between some text via inputting space characters, and then we want to store that input as a number:
 ```rust
 let spaces = "  ";
 let spaces = spaces.len();
@@ -141,11 +141,11 @@ In [[Chapter 2 Programming a Guessing Game]] we used the `u32` type. This type d
 | 128-bit | `i128`  | `u128`   |
 | arch    | `isize` | `usize`  | 
 
-Each variant can be either signed or unsigned and has an explicity size. Signed and unsigned refer to if the number can be negative. Signed -> Possible to be negative, unsigned -> always positive. Each signed variant can store numbers from -(2n - 1) to 2n - 1 - 1 inclusive, where _n_ is the number of bits that variant uses. So an `i8` can store numbers from -(27) to 27 - 1, which equals -128 to 127. Unsigned variants can store numbers from 0 to 2n - 1, so a `u8` can store numbers from 0 to 28 - 1, which equals 0 to 255.
+Each variant can be either signed or unsigned and has an explicit size. Signed and unsigned refer to if the number can be negative. Signed -> Possible to be negative, unsigned -> always positive. Each signed variant can store numbers from -(2n - 1) to 2n - 1 - 1 inclusive, where _n_ is the number of bits that variant uses. So an `i8` can store numbers from -(27) to 27 - 1, which equals -128 to 127. Unsigned variants can store numbers from 0 to 2n - 1, so a `u8` can store numbers from 0 to 28 - 1, which equals 0 to 255.
 
 `isize` and `usize` are dependent on the architecture of the computer your program is running on.  64 bits if on 64-bit architecture, 32 bits if on 32-bit architecture
 
-Integer literals can be in any of the forms wihtin the following table. Number literals that can be mlutiple numeric types allow a type suffix, such as `57u8` to designate the type. Number literals can also use `_` as a visual separator to make the number easier to read such as `1_000` which is equal to `1000` 
+Integer literals can be in any of the forms within the following table. Number literals that can be multiple numeric types allow a type suffix, such as `57u8` to designate the type. Number literals can also use `_` as a visual separator to make the number easier to read such as `1_000` which is equal to `1000` 
 
 | Number Literals | Example       |
 | --------------- | ------------- |
