@@ -422,3 +422,200 @@ fn main() {
 
 `Fn` traits are important when defining or using functions/types that make use of closures. The next section will be about iterators. Many iterator methods take closure arguments.
 
+
+# Processing a Series of Items with Iterators
+The iterator pattern allows you to perform some task on a sequence of items in turn #iterators . Iterators are responsible for the logic of iterating over each item and determining when the sequence has finished. 
+
+In Rust, iterators are *lazy* which means they have no effect until you call methods that consume the iterator to use it up. For example, the following code creates an iterator over the items in vector `v1` by calling the `iter` method defined on `Vec<T>`. The code itself doesn't do anything:
+```run-rust
+let v1 = vec![1, 2, 3];
+
+let v1_iter = v1.iter();
+```
+
+The iterator is stored in the `v1_iter` variable. Once the iterator is created, we can use it in a variety of ways like printing out values in a `for` loop.
+
+## Iterator Trait and the `next` Method
+
+All iterators implement a trait named `Iterator` that is defined in the standard library. The definition of the trait looks like this:
+```rust
+pub trait Iterator {
+	type Item;
+
+	fn next(&mut self) -> Option<Self::Item>;
+
+	// methods with default implementations elided
+}
+```
+
+This definition uses two new different types of syntax: `type Item` and `Self::Item`. These define an *associated type* with this trait but this is something that will be covered in [[Chapter 19 Advanced Features]]. Basically, this means that this code says that implementing the `Iterator` trait requires that you also define an `Item` type and this `Item` type is used in the return type of the `next` method. `Item` will be the type returned from the `Iterator`. 
+
+The `Iterator` trait only requires implementors to define one method: the `next` method, which returns one item of the iterator at a time wrapped in `Some` and, when the iteration is over, returns `None`. 
+We can call the `next` method on iterators directly. The following code demonstrates what values are returned from repeated calls to `next` on the iterator created from the vector.
+
+```run-rust
+    #[test]
+    fn iterator_demonstration() {
+        let v1 = vec![1, 2, 3];
+
+        let mut v1_iter = v1.iter();
+
+        assert_eq!(v1_iter.next(), Some(&1));
+        assert_eq!(v1_iter.next(), Some(&2));
+        assert_eq!(v1_iter.next(), Some(&3));
+        assert_eq!(v1_iter.next(), None);
+    }
+
+```
+
+We have to make `v1_iter` mutable: calling the `next` method on an iterator changes the internal state that the iterator uses to keep track of where it is in the sequence. This means, that this code *uses up* the iterator. Each call to `next` eats up an item from the iterator.
+
+We didn't need to make `v1_iter` mutable when we used a `for` loop because the loop took ownership of `v1_iter` and made it mutable behind the scenes. 
+
+Also note that the values we get form the calls to `next` are immutable references to the values in the vector. The `iter` method produces an iterator over immutable references. If we want to create an iterator that takes ownership of `v1` and returns owned values, we can call `into_inter` instead of `iter`. Similarly, if we want to iterate over mutable references, we can call `iter_mut` instead of `iter`. 
+
+### Methods that Consume the Iterator
+
+The `Iterator` trait has a number of different methods with default implementation provided by the standard library; check the standard library API documentation for the `Iterator` trait. 
+
+Some of these methods call the `next` method in their definition, which is why you're required to implement the `next` method when implementing the `Iterator` trait.
+
+Methods that call `next` are called *consuming adapters* #consuming-adapters because calling them uses up the iterator. One example is the `sum` method, which takes ownership of the iterator and iterates through the items by repeatedly calling `next`, consuming the iterator. As it iterates through, it adds each item to a running total and returns the total when iteration is complete. The following code has a test illustrating a use of the `sum` method:
+```rust
+    #[test]
+    fn iterator_sum() {
+        let v1 = vec![1, 2, 3];
+
+        let v1_iter = v1.iter();
+
+        let total: i32 = v1_iter.sum();
+
+        assert_eq!(total, 6);
+    }
+
+```
+
+We aren't allowed to use `v1_iter` after the call to `sum` because `sum` takes ownership of the iterator we call it on. 
+
+### Methods that Produce other Iterators
+*Iterator adapters* #iterator-adapters are methods defined on the `Iterator` trait that don't consume the iterator. Instead, they produce different iterators by changing some aspect of the original iterator.
+
+The following code shows an example of calling the iterator adapter method `map`, which takes a #closures to call on each item as the items are iterated through. The `map` method returns a new iterator that produces the modified items. The closure here creates a new iterator in which each item from the vector will be implemented by 1:
+
+```rust
+let v1: Vec<i32> = vec![1, 2, 3];
+v1.iter().map(|x| x + 1);
+```
+However, calling this code produces this warning.
+```shell
+$ cargo run
+   Compiling iterators v0.1.0 (file:///projects/iterators)
+warning: unused `Map` that must be used
+ --> src/main.rs:4:5
+  |
+4 |     v1.iter().map(|x| x + 1);
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_must_use)]` on by default
+  = note: iterators are lazy and do nothing unless consumed
+
+warning: `iterators` (bin "iterators") generated 1 warning
+    Finished dev [unoptimized + debuginfo] target(s) in 0.47s
+     Running `target/debug/iterators`
+
+```
+
+The code above doesn't actually do anything. The closure we've specified never gets called. The warning tells us why: iterator adapters are lazy and we need to consume the iterator here.
+
+To fix this warning and consume the iterator, we'll use the `collect` method, which was used in [[Chapter 12 An IO Project - Building A command Line Program]] with `env::args`. This method consumes the iterator and collects the resulting values into a collection data type.
+
+In the below code, we collect the results of iterating over the iterator that's returned from the call to `map` into a vector. This vector will end up containing each item from the original vector incremented by 1. 
+
+```rust
+let v1: Vec<i32> = vec![1, 2, 3];
+
+let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
+
+assert_eq!(v2, vec![2, 3, 4]);
+```
+Calling the `map` method to create a new iterator and then calling the `collect` method to consume the new iterator and create a vector.
+
+`Map` takes a closure allowing us to specify any operation we want to perform on each item. Just one example of how closures let you customize some behavior while reusing the iteration behavior that the `Iterator` trait provides.
+
+You can chain multiple calls to iterator adapters to perform complex actions in a readable way. But because all iterators are lazy, you have to call one of the consuming adapter methods to get results from calls to iterator adapters. 
+
+## Quick Summary for Iterators
+
+Iterators are built-in types that can perform some task on a sequence of items. All iterators are lazy which means they have no effect until a method consumes them. 
+
+General use-case:
+1) Call iterator
+2) Potentially add iterator adapters to continue the iterator
+3) End the iterator by calling a consuming adapter method
+
+## Using Closures that Capture their Environment
+
+Many iterator adapters take closures as arguments, and commonly the closure's we'll specify as arguments to iterator adapters will be closures that capture their environment.
+
+For the next example, we'll use the `filter` method that takes a closure. The closure gets an item from the iterator and returns a `bool`. If the closure returns `true`, the value will be included in the iteration produced by `filter`. If the closure returns `false`, the value won't be included. 
+
+We use `filter` with a closure that captures the `shoe_size` variable from its environment to iterate over a collection of `Shoe` struct instances. It will return only shoes that are the specified size.
+
+```rust
+#[derive(PartialEq, Debug)]
+struct Shoe {
+    size: u32,
+    style: String,
+}
+
+fn shoes_in_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
+    shoes.into_iter().filter(|s| s.size == shoe_size).collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn filters_by_size() {
+        let shoes = vec![
+            Shoe {
+                size: 10,
+                style: String::from("sneaker"),
+            },
+            Shoe {
+                size: 13,
+                style: String::from("sandal"),
+            },
+            Shoe {
+                size: 10,
+                style: String::from("boot"),
+            },
+        ];
+
+        let in_my_size = shoes_in_size(shoes, 10);
+
+        assert_eq!(
+            in_my_size,
+            vec![
+                Shoe {
+                    size: 10,
+                    style: String::from("sneaker")
+                },
+                Shoe {
+                    size: 10,
+                    style: String::from("boot")
+                },
+            ]
+        );
+    }
+}
+```
+
+The `shoes_in_size` function takes ownership of a vector of shoes and a shoe size as parameters. It returns a vector containing only shoes of the specified size.
+
+In the body of `shoes_in_size`, we call `into_iter` to create an iterator that takes ownership of the vector. Then we call `filter` to adapt that iterator into a new iterator that only contains elements for which the closure returns `true`.
+
+The closure captures the `shoe_size` parameter from the environment and compares the value with each shoe’s size, keeping only shoes of the size specified. Finally, calling `collect` gathers the values returned by the adapted iterator into a vector that’s returned by the function.
+
+The test shows that when we call `shoes_in_size`, we get back only shoes that have the same size as the value we specified.
