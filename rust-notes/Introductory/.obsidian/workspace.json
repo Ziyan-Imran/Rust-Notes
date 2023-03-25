@@ -4,23 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "93aed6ab87c0cea4",
+        "id": "8f9e2083e51dff6b",
         "type": "tabs",
         "children": [
           {
-            "id": "af8a56c3244f0512",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Chapter 5 Using Structs to Structure Related Data.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "0765ae25dc172e89",
+            "id": "fac4b8ba953c54b7",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -31,8 +19,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -82,7 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 454.5
+    "width": 200
   },
   "right": {
     "id": "095e72d04d35ab74",
@@ -163,7 +150,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 326.5
+    "width": 444.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -176,22 +163,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "7288f68d39a8cadf",
+  "active": "fac4b8ba953c54b7",
   "lastOpenFiles": [
+    "Chapter 13 Functional Language Features Iterators and Closures.md",
+    "Untitled.canvas",
+    "Chapter 12 An IO Project - Building A command Line Program.md",
+    "Untitled 1.canvas",
+    "Chapter 5 Using Structs to Structure Related Data.md",
     "Chapter 15 Smart Pointers.md",
     "Chapter 17 Object Oriented Programming Features of Rust.md",
     "Chapter 10 Generic Types, Traits, and Lifetimes.md",
-    "Chapter 13 Functional Language Features Iterators and Closures.md",
     "Chapter 3 Common Programming Concepts.md",
-    "Chapter 5 Using Structs to Structure Related Data.md",
     "Chapter 19 19. Advanced Features.md",
     "Chapter 19 Advanced Features.md",
     "Chapter 1 Intro.md",
     "Chapter 4 Understanding Ownership.md",
-    "Untitled.canvas",
     "Chapter 6 Enums and Pattern Matching.md",
     "Chapter 16 Fearless Concurrency.md",
-    "Chapter 12 An IO Project - Building A command Line Program.md",
     "Chapter 11 Writing Automated Tests.md"
   ]
 }

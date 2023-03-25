@@ -1,6 +1,11 @@
 {
 	"nodes":[
-		{"id":"b088a67369ae11f4","x":-480,"y":-440,"width":360,"height":600,"type":"file","file":"Chapter 2 Programming a Guessing Game.md"}
+		{"type":"file","file":"Chapter 12 An IO Project - Building A command Line Program.md","id":"0b0bea771128f401","x":-280,"y":-720,"width":360,"height":200},
+		{"type":"file","file":"Chapter 13 Functional Language Features Iterators and Closures.md","id":"1df78dbcced78ebb","x":-880,"y":-680,"width":340,"height":220},
+		{"id":"281ac9a61c0dcf92","x":-920,"y":-220,"width":1220,"height":940,"type":"link","url":"https://vscode.dev"}
 	],
-	"edges":[]
+	"edges":[
+		{"id":"e94f537cc2d28252","fromNode":"0b0bea771128f401","fromSide":"left","toNode":"1df78dbcced78ebb","toSide":"right"},
+		{"id":"28c4d78e0aac940a","fromNode":"1df78dbcced78ebb","fromSide":"bottom","toNode":"281ac9a61c0dcf92","toSide":"top"}
+	]
 }
