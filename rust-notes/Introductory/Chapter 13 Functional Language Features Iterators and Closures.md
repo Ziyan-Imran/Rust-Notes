@@ -26,7 +26,7 @@ First example: Capture values from the environment they're defined in for later 
 
 Scenario: We have a t-shit company that gives away an exclusive shirt to someone our mailing list. People on the mailing list can optionally add their favorite color to their profile. If a person is chosen and has their favorite color set, they get that color shirt. If the person hasn't specified a color, they get whatever color the company currently has the most of.
 
-How to Implement: We'll use an enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the # of colors). The company's inventory will have a struct called `Inventory` taht has a field named `shirts` that contains a `Vec<ShirtColor>` representing the colors currently in stock. The method `giveaway` defined on `Inventory` gets the optional shirt color preference and returns the shirt color the person will get.
+How to Implement: We'll use an enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the # of colors). The company's inventory will have a struct called `Inventory` that has a field named `shirts` that contains a `Vec<ShirtColor>` representing the colors currently in stock. The method `giveaway` defined on `Inventory` gets the optional shirt color preference and returns the shirt color the person will get.
 
 ```run-rust
 #[derive(Debug, PartialEq, Copy, Clone)]
@@ -195,7 +195,7 @@ Closures can capture values from their environment in *three* ways which directl
 ### Borrowing Immutably 
 The following example defines a closure that captures an immutable reference to the vector named `list` because it only needs an immutable reference to print the value. It also illustrates that a variable can bind to a closure definition, and can be later called by using the variable name and parentheses as if the variable name was a function:
 
-```rust
+```run-rust
 fn main() {
     let list = vec![1, 2, 3];
     println!("Before defining closure: {:?}", list);
@@ -207,6 +207,7 @@ fn main() {
     println!("After calling closure: {:?}", list);
 }
 ```
+
 
 
 Since we can have multiple immutable references to `list` at the same time, `list` is still accessible from the code before the closure definition, after the closure definition but before the closure is called, and after the closure is called. Running the code produces the following:
