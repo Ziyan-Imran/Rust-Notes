@@ -69,7 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 281.5
   },
   "right": {
     "id": "095e72d04d35ab74",
@@ -163,7 +163,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "fac4b8ba953c54b7",
+  "active": "7288f68d39a8cadf",
   "lastOpenFiles": [
     "Chapter 13 Functional Language Features Iterators and Closures.md",
     "Untitled.canvas",
