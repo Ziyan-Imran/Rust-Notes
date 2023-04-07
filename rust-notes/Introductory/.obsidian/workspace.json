@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Chapter 14 More about Cargo and Crates.Io.md",
+                "file": "Chapter 15 Smart Pointers.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 281.5
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "095e72d04d35ab74",
@@ -85,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Chapter 14 More about Cargo and Crates.Io.md",
+                "file": "Chapter 15 Smart Pointers.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Chapter 14 More about Cargo and Crates.Io.md",
+                "file": "Chapter 15 Smart Pointers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Chapter 14 More about Cargo and Crates.Io.md"
+                "file": "Chapter 15 Smart Pointers.md"
               }
             }
           },
@@ -150,7 +151,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 444.5
+    "width": 529.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -165,7 +166,11 @@
   },
   "active": "7288f68d39a8cadf",
   "lastOpenFiles": [
+    "Chapter 4 Understanding Ownership.md",
+    "Chapter 15 Smart Pointers.md",
     "Chapter 14 More about Cargo and Crates.Io.md",
+    "Pasted image 20230406171006.png",
+    "Chapter 16 Fearless Concurrency.md",
     "Art Crate Using Pub Use.png",
     "Images/Art Crate Docs.png",
     "Images/cargo_doc_crate_description.png",
@@ -177,15 +182,12 @@
     "Chapter 12 An IO Project - Building A command Line Program.md",
     "Untitled 1.canvas",
     "Chapter 5 Using Structs to Structure Related Data.md",
-    "Chapter 15 Smart Pointers.md",
     "Chapter 10 Generic Types, Traits, and Lifetimes.md",
     "Chapter 3 Common Programming Concepts.md",
     "Chapter 19 19. Advanced Features.md",
     "Chapter 19 Advanced Features.md",
     "Chapter 1 Intro.md",
-    "Chapter 4 Understanding Ownership.md",
     "Chapter 6 Enums and Pattern Matching.md",
-    "Chapter 16 Fearless Concurrency.md",
     "Chapter 11 Writing Automated Tests.md"
   ]
 }
