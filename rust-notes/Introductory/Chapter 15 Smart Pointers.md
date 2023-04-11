@@ -50,4 +50,134 @@ Putting a single value on the heap isn't very useful, so you won't use boxes by 
 
 A value of *recursive type* can have another value of the same type as part of itself. Recursive types pose an issue because at compile time, Rust needs to know how much space a type takes up. However, the nesting of values of recursive types could theoretically continue infinitely, so Rust can't know how much space the value needs. Because boxes have a known size, we can enable recursive types by inserting a box in the recursive type definition. 
 
-An example of a recursive type, let's explore the *cons list*. 
+An example of a recursive type, let's explore the *cons list*. This is a data type typically found in functional programming languages. The cons list type we'll define is straightforward except for the recursion; therefore, the concepts in the example we'll work with will be useful any time you get into more complex situations involving recursive types. 
+
+### More Info about the Cons List
+A *cons list* is a data structure that comes from the Lisp programming language and its dialects and is made up of nested pairs, and is the Lisp version of a linked list. Its name comes from the `cons` function (short for "construct function") in Lisp that constructs a new pair from its two arguments. By calling `cons` on a pair consisting of a value and another pair, we can construct cons list made up of recursive pairs.
+
+For example, here's a pseudocode representation of a cons list containing the list 1, 2, 3 with each pair in parentheses:
+```
+(1, (2, (3, Nil)))
+```
+
+Each item in a cons list contains two elements: the value of the current item and the next item. The last item in the list contains only a value called `Nil` without a next item. A cons list is produced by recursively calling the `cons` function. The canonical name to denote the base case of the recursion is `Nil`. Note that is not the same as the "null" or "nil" concept in [[Chapter 6 Enums and Pattern Matching]], which is an invalid or absent value.
+
+The cons list isn't a commonly used data structure in Rust. Most of the time when you have a list of items in Rust, `Vec<T>` is a better choice to use. Other, more complex recursive data types *are* useful in various situations, but by starting with the cons list in this chapter, we can explore how boxes let us define a recursive data type without much distraction.
+
+The below code contains an enum definition for a cons list. 
+> This code won't compile yet because the `List` type doesn't have a known size, which we'll demonstrate
+
+```run-rust
+enum List {
+	Cons(i32, List),
+	Nil,
+}
+```
+
+---
+
+We're implementing a cons list that holds only `i32` values for the purposes of this example. We could have implemented it using generics as discussed in [[Chapter 10 Generic Types, Traits, and Lifetimes]], to define a cons list type that could store values of any type.
+
+--- 
+
+Using the `List` type to store the list `1, 2, 3` would look like the following code:
+
+```run-rust
+use crate::List::{Cons, Nil};
+fn main() {
+	let list = Cons(1, Cons(2, Cons(3, Nill)));
+}
+```
+
+The first `Cons` value holds `1` and another `List` value. This `List` value is another `Cons` value that holds `2` and another `List` value. This `List` value is one more `Cons` value that holds `3` and a `List` value, which is finally `Nil`, the non-recursive variant that signals the end of the list. 
+
+Trying to run the above code generates the following:
+```shell
+$ cargo run
+   Compiling cons-list v0.1.0 (file:///projects/cons-list)
+error[E0072]: recursive type `List` has infinite size
+ --> src/main.rs:1:1
+  |
+1 | enum List {
+  | ^^^^^^^^^ recursive type has infinite size
+2 |     Cons(i32, List),
+  |               ---- recursive without indirection
+  |
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` representable
+  |
+2 |     Cons(i32, Box<List>),
+  |               ++++    +
+
+For more information about this error, try `rustc --explain E0072`.
+error: could not compile `cons-list` due to previous error
+```
+
+This errors shows this type "has infinite size". The reason is that we've defined `List` with a variant that is recursive: it holds another value of itself directly. As a result, Rust can't figure out how much space it needs to store a `List` value. Let's break down *why* we get this error. 
+
+First, we'll look at how Rust decides how much space it needs to store a value of a non-recursive type. 
+
+### Computing the Size of a Non-Recursive Type
+
+Recall the `Message` enum we used in [[Chapter 6 Enums and Pattern Matching]] when we discussed enum definitions:
+```rust
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+```
+
+To determine how much space to allocate for a `Message` value, Rust goes through each of the variants to see which variant needs the most space. Rust sees that `Message::Quit`, doesn't need any space, `Message::Move` needs enough space to store two `i32` values, and so forth. Because only one variant will be used, the most space a `Message` value will need is the space it would take to store the largest of its variants.
+
+Contrast this with what happens when Rust tries to determine how much space a recursive type like the `List` enum above needs. The compiler starts by looking at the `Cons` variant that holds a value of type `i32` and a value of type `List`. To figure out how much memory the `List` type needs, the compiler looks at its variants which is itself and continues infinitely. 
+
+![[Chapter15_ConsImageMemory.png]]
+
+
+### Using `Box<T>` to Get a Recursive Type with a Known Size
+
+Because Rust can't figure out how much space to allocate for recursively defined types, the compiler gives this error with a helpful suggestion:
+```
+help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` representable
+  |
+2 |     Cons(i32, Box<List>),
+  |               ++++    +
+
+```
+
+In this suggestion, "indirection" means that instead of a storing a value directly, we should change the data structure to store the value indirectly by storing a pointer to the value instead. 
+
+Since `Box<T>` is a pointer, Rust always knows much space a `Box<T>` needs: a pointer's size doesn't change based on the amount of data it's pointing to. This means we can put a `Box<T>` inside the `Cons` variant instead of another `List` value directly. The `Box<T>` will point to the next `List` value that will be on the *heap* instead of inside the `Cons` variant. 
+Conceptually, we still have a list, created with lists holding other lists, but this implementation is now more like placing the items next to one another rather than inside one another. 
+
+We can change the definition of the `List` enum above and the usage of the `List` to the following code, which will compile:
+
+```run-rust
+enum List {
+    Cons(i32, Box<List>),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
+
+fn main() {
+    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+}
+```
+
+The `Cons` variant needs the size of an `i32` plus the space to store the box's pointer data. The `Nil` variant stores no values, so it needs less space than the `Cons` variant. We now that any `List` value will take up the size of an `i32` plus the size of a box's pointer data. By using a box, we've broken the infinite, recursive chain, so the compiler can figure out the size it needs to store a `List` values. 
+![[Pasted image 20230411151703.png]]
+Figure showing that a `List` is not infinitely sized because `Cons` holds a `Box`
+
+Boxes provide only the indirection and heap allocation; they don't have any other special capabilities like we'll see with other smart pointer types. They also don't have the performance overhead that these special capabilities incur, so they can be useful in cases like the cons list where the indirection is the only feature we need. We'll look at more use cases for boxes in [[Chapter 17 Object Oriented Programming Features of Rust]].
+
+## Quick Summary About `Box<T>`
+The `Box<T>` type is a smart pointer because it implements the `Deref` trait, which allows `Box<T>` values to be treated like references. When a `Box<T>` value goes out of scope, the heap data that the box is pointing to is cleaned up as well because of the `Drop` trait implementation. These two traits will be even more important to the functionality provided by the other smart pointer types we'll discuss in the rest of this chapter.
+
+
+# 15.2 Treating Smart Pointers like Regular References with the `Deref` Trait
+
+
+
