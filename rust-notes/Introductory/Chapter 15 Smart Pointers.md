@@ -168,7 +168,7 @@ fn main() {
 ```
 
 The `Cons` variant needs the size of an `i32` plus the space to store the box's pointer data. The `Nil` variant stores no values, so it needs less space than the `Cons` variant. We now that any `List` value will take up the size of an `i32` plus the size of a box's pointer data. By using a box, we've broken the infinite, recursive chain, so the compiler can figure out the size it needs to store a `List` values. 
-![[Pasted image 20230411151703.png]]
+![[Cons_WithBox.png]]
 Figure showing that a `List` is not infinitely sized because `Cons` holds a `Box`
 
 Boxes provide only the indirection and heap allocation; they don't have any other special capabilities like we'll see with other smart pointer types. They also don't have the performance overhead that these special capabilities incur, so they can be useful in cases like the cons list where the indirection is the only feature we need. We'll look at more use cases for boxes in [[Chapter 17 Object Oriented Programming Features of Rust]].
@@ -399,3 +399,157 @@ Rust does deref coercion when it finds types and trait implementations in three 
 The first two cases are the same as each other except that the second implements mutability. The first case states that if you have a `&T`, and `T` implements `Deref` to some type `U`, you can get a `&U` transparently. The second case states that the same deref coercion happens for mutable references.
 
 The third case is trickier: Rust will also coerce a mutable reference to an immutable one. But the reverse is _not_ possible: immutable references will never coerce to mutable references. Because of the borrowing rules, if you have a mutable reference, that mutable reference must be the only reference to that data (otherwise, the program wouldn’t compile). Converting one mutable reference to one immutable reference will never break the borrowing rules. Converting an immutable reference to a mutable reference would require that the initial immutable reference is the only immutable reference to that data, but the borrowing rules don’t guarantee that. Therefore, Rust can’t make the assumption that converting an immutable reference to a mutable reference is possible.
+
+# 15.3 Running Code on Cleanup with the `Drop` Trait
+
+The second trait important to the smart pointer pattern is `Drop`., which lets you customize what happens when a value is about to go out of scope. You can provide an implementation for the `Drop` trait on any type, and that code can be used to release resources like files or network connections.
+
+We're introducing the `Drop` int he context of smart pointers because the functionality of the `Drop` trait is almost always used when implementing a smart pointer. For example, when a `Box<T>` is dropped it will deallocate the space on the heap the box points to. 
+
+In some languages, for some types, the programmer must call code to free memory or resources every time they finish using an instance of those types. Examples include file handles, sockets, or locks. If they forget, the system might become overloaded and crash. In Rust, you can specify that a particular bit of code be run whenever a value goes out of scope, and the compiler will insert this code automatically. As a result, you don't need to be careful about placing cleanup code everywhere in a program that an instance of a particular type is finished with--you still won't leak resources!
+
+You specify the code to run when a value goes out of scope by implementing the `Drop` trait. The `Drop` trait requires you to implement one method named `drop` that takes a mutable reference to `self`. To see when Rust calls `drop`, let's implement `drop` with `println!` statements for now. 
+
+The following code shows a `CustomSmartPointer` struct whose only custom functionality is that it will print `Dropping CustomSmartPointer!` when the instance goes out of scope, to show when Rust runs the `drop` function.
+
+```run-rust
+struct CustomSmartPointer {
+    data: String,
+}
+
+impl Drop for CustomSmartPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+    }
+}
+
+fn main() {
+    let c = CustomSmartPointer {
+        data: String::from("my stuff"),
+    };
+    let d = CustomSmartPointer {
+        data: String::from("other stuff"),
+    };
+    println!("CustomSmartPointers created.");
+}
+```
+
+Explaining the Code:
+- `Drop` trait is included in the prelude, so we don't need to bring it into scope. 
+- We implement the `Drop` trait on `CustomSmartPointer` and provide an implementation for the `drop` method that calls `println!`
+	- Body of the `drop` function is where you place any logic that you wanted to run when an instance of your type goes out of scope
+	- We're printing some text here to demonstrate visually when Rust will call `drop`
+- In `main`, we create two instances of `CustomSmartPointer` and then print `CustomSmartPointers created` 
+	- At the end of `main`, our instances of `CustomSmartPointer` will go out of scope
+	- Rust will call the code we put in the `drop` method, printing our final message. 
+	- Note that we don't need to call the `drop` method explicitly
+
+Output is the following:
+```shell
+ ~/P/i/c/drop_trait   …  cargo run                                                                                                                                         1.8m  Tue 11 Apr 2023 05:20:28 PM EDT
+   Compiling drop_trait v0.1.0 (/home/ziyan/Projects/intro_rust/chapter15/drop_trait)
+warning: unused variable: `c`
+  --> src/main.rs:12:9
+   |
+12 |     let c = CustomSmartPointer {
+   |         ^ help: if this is intentional, prefix it with an underscore: `_c`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `d`
+  --> src/main.rs:15:9
+   |
+15 |     let d = CustomSmartPointer {
+   |         ^ help: if this is intentional, prefix it with an underscore: `_d`
+
+warning: `drop_trait` (bin "drop_trait") generated 2 warnings
+    Finished dev [unoptimized + debuginfo] target(s) in 0.11s
+     Running `target/debug/drop_trait`
+CustomSmartPointers created.
+Dropping CustomSmartPointer with data 'other stuff'!
+Dropping CustomSmartPointer with data 'my stuff'!
+```
+
+Rust automatically called `drop` for us when our instances went out of scope, calling the code we specified. Variables are dropped in the reverse order of their creations, so `d` was dropped before `c`. 
+
+## Dropping a Value Early with `std::mem::drop`
+
+Unfortuantely, it's not straightforward to disable the automatic `drop` functionality. Disabling `drop` isn't necessary; the whole point of the `Drop` trait is taht it's taken care of automatically. Occasionally, you might want to clean up a value early like when using smart pointers that manage locks: you might want to force the `drop` method that releases the lock so taht other code in the same scope can acquire the lock. Rust doesn't let you call the `Drop` trait's `drop` method manually; instead you have to call the `std::mem::drop` function provided by the standard library if you want to force a value to be dropped before the end of its scope. 
+
+If we try to call the `Drop` trait's `drop` method manually by modifying the `main` function above, we'll get a compiler error:
+
+```rust
+fn main() {
+    let c = CustomSmartPointer {
+        data: String::from("some data"),
+    };
+    println!("CustomSmartPointer created.");
+    c.drop();
+    println!("CustomSmartPointer dropped before the end of main.");
+}
+```
+
+Here's the error message:
+```shell
+$ cargo run
+   Compiling drop-example v0.1.0 (file:///projects/drop-example)
+error[E0040]: explicit use of destructor method
+  --> src/main.rs:16:7
+   |
+16 |     c.drop();
+   |     --^^^^--
+   |     | |
+   |     | explicit destructor calls not allowed
+   |     help: consider using `drop` function: `drop(c)`
+
+For more information about this error, try `rustc --explain E0040`.
+error: could not compile `drop-example` due to previous error
+
+```
+
+This error message states we're not allowed to explicitly call `drop`. The error message uses the term *destructor*, which is the general programming term for a function that cleans up an instance. A *destructor* is analogous to a *constructor*, which creates an instance. 
+
+Rust doesn't let us call `drop` explicitly because Rust would still automatically call `drop` on the value at the end of `main`. This would cause a *double free* error because Rust would try to clean up the same value twice.
+
+We can't disable automatic insertion of `drop`, and we can't call `drop` explicitly, so to force a value to be cleaned up early we use `std::mem::drop`. 
+
+The `std::mem::drop` function is different from the `drop` method. We call it by passing as an argument the value we want to force drop. The function is in the prelude, so we can modify `main` to call the `drop` function as shown below:
+
+```rust
+fn main() {
+    let c = CustomSmartPointer {
+        data: String::from("some data"),
+    };
+    println!("CustomSmartPointer created.");
+    drop(c);
+    println!("CustomSmartPointer dropped before the end of main.");
+}
+```
+
+
+Running this code will generate the following:
+```shell
+ ~/P/i/c/drop_trait   …  cargo run                                                                                                                                          19s  Tue 11 Apr 2023 05:29:56 PM EDT
+   Compiling drop_trait v0.1.0 (/home/ziyan/Projects/intro_rust/chapter15/drop_trait)
+warning: unused variable: `d`
+  --> src/main.rs:18:9
+   |
+18 |     let d = CustomSmartPointer {
+   |         ^ help: if this is intentional, prefix it with an underscore: `_d`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+warning: `drop_trait` (bin "drop_trait") generated 1 warning
+    Finished dev [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/drop_trait`
+Dropping CustomSmartPointer with data 'my stuff'!
+CustomSmartPointers created.
+```
+
+The text ``Dropping CustomSmartPointer with data `some data`!`` is printed between the `CustomSmartPointer created.` and `CustomSmartPointer dropped before the end of main.` text, showing that the `drop` method code is called to drop `c` at that point.
+
+You can use code specified in a `Drop` trait implementation in many ways to make cleanup convenient and safe: for instance, you could use it to create your own memory allocator! With the `Drop` trait and Rust’s ownership system, you don’t have to remember to clean up because Rust does it automatically.
+
+You also don’t have to worry about problems resulting from accidentally cleaning up values still in use: the ownership system that makes sure references are always valid also ensures that `drop` gets called only once when the value is no longer being used.
+
+Now that we’ve examined `Box<T>` and some of the characteristics of smart pointers, let’s look at a few other smart pointers defined in the standard library.
