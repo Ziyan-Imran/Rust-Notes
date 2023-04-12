@@ -69,7 +69,7 @@ This creates a new variable named `apples` and binds it to the value 5. In Rust,
 
 The `::` syntax in the `::new` line indicates that `new` is an associated function of the `String` type. An *associated function* is a function that's implemented on a type, in this case `String`. This `new` function creates a new, empty string. You'll find a `new` function on many types, because it's a common name for a function that makes a new value of some kind. 
 
-In full, the `let mut guess = String::new();` line has created a mutable variable that is cvurrently bound to a new, empty instance of a`String`. 
+In full, the `let mut guess = String::new();` line has created a mutable variable that is currently bound to a new, empty instance of a`String`. 
 
 ### Receiving User Input
 
@@ -160,7 +160,7 @@ The first part is sucessful, onwards to the next.
 The secret number should be different every time and we'll need to use the `rand` [crate].
 
 ### Using a Crate to Get More Functionality
-A [crate]  is a collection of Rust source code files. The project we've been building is a *binary carte* which is an executable. The `rand` crate is a *library crate*, which contains code intended to be used in other programs and can't be executed on its own. 
+A [crate]  is a collection of Rust source code files. The project we've been building is a *binary crate* which is an executable. The `rand` crate is a *library crate*, which contains code intended to be used in other programs and can't be executed on its own. 
 
 To use a crate do the following:
 1. Modify *Cargo.toml* file to include the `rand` crate as a dependency

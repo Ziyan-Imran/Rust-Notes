@@ -31,7 +31,7 @@ For more information about this error, try `rustc --explain E0384`.
 error: could not compile `variables` due to previous error
 ```
 
-The pros of having immutability is removing the possibliity of a later part of the code changing the value of a variable used earlier. This type of error is hard to track down especially if the error only occurs sometimes. 
+The pros of having immutability is removing the possibility of a later part of the code changing the value of a variable used earlier. This type of error is hard to track down especially if the error only occurs sometimes. 
 
 However, mutability can still be useful and make code more convenient to write. You can variables mutable by adding `mut` in front of the variable name as we did in [[Chapter 2 Programming a Guessing Game]]. 
 
@@ -75,7 +75,7 @@ Constants are valid for the entire time a program runs, within the scope they we
 As we saw in [[Chapter 2 Programming a Guessing Game]], you can declare a new variable with the same name as a previous variable. We say that the first variable is [shadowed] by the second, which means that the second variable is what the compiler will see when you use the name of the variable. In effect, the second variable overshadows the first, taking any uses of the variable name to itself until it itself is shadowed or the scope ends. 
 
 An example of using shadowing:
-```rust
+```run-rust
 fn main() {
     let x = 5;
 
@@ -89,6 +89,7 @@ fn main() {
     println!("The value of x is: {x}");
 }
 ```
+
 
 An order of operations of what goes on above:
 1. `x` is bound to a value of 5
@@ -340,12 +341,12 @@ fn another_function() {
 }
 ```
 
-We define a function in Rust by entering `fn` followed by a function name and a set of parantheses. The curly brackets tell the compiler where the function body begins and ends. 
+We define a function in Rust by entering `fn` followed by a function name and a set of parentheses. The curly brackets tell the compiler where the function body begins and ends. 
 
 Rust doesn't care where you define your functions (main before or after doesn't matter), only that they're defined somewhere in a scope that can be scene by the caller. 
 
 ## Parameters
-We can define function to have parameteres to be passed into the function for use. Here's an example of passing a parameter into the `another_function` :
+We can define function to have parameters to be passed into the function for use. Here's an example of passing a parameter into the `another_function` :
 ```rust
 fn main() {
 	another_function(5);
@@ -355,7 +356,7 @@ fn another_function(x: i32):{
 	println!("The value of x is: {x}");
 }
 ```
-In funciton signatures, you *must* declare the type of each parameter. Requiring type annotations in function definitions means the compiler almost never needs you to use them elsewhere in the code to figure out what type you mean + gives more helpful compiler error messages. 
+In function signatures, you *must* declare the type of each parameter. Requiring type annotations in function definitions means the compiler almost never needs you to use them elsewhere in the code to figure out what type you mean + gives more helpful compiler error messages. 
 
 When defining multiple parameters, separate them with commas, like so:
 ```rust
@@ -473,7 +474,7 @@ fn main() {
 }
 
 ```
-As with other languages, Rust goes in order of appeareance of the `else if` expressions. `6` is also divisible by 2 but it reachs the `% 3` step first. 
+As with other languages, Rust goes in order of appearance of the `else if` expressions. `6` is also divisible by 2 but it reaches the `% 3` step first. 
 
 ## Using `if` in a `let` Statement
 Since `if` is an expression, we can use it in a `let` statement like so:
