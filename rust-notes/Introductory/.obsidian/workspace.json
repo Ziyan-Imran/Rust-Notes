@@ -20,20 +20,8 @@
               },
               "pinned": true
             }
-          },
-          {
-            "id": "8641c01992bf0324",
-            "type": "leaf",
-            "state": {
-              "type": "diff-view",
-              "state": {
-                "file": "rust-notes/Introductory/Chapter 2 Programming a Guessing Game.md",
-                "staged": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -99,6 +87,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Chapter 15 Smart Pointers.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,6 +104,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Chapter 15 Smart Pointers.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -136,7 +126,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Chapter 15 Smart Pointers.md"
+              }
             }
           },
           {
@@ -168,7 +160,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 529.5
+    "width": 464.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -181,7 +173,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8641c01992bf0324",
+  "active": "7288f68d39a8cadf",
   "lastOpenFiles": [
     "Chapter 5 Using Structs to Structure Related Data.md",
     "Chapter 4 Understanding Ownership.md",
