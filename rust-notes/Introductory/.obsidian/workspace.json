@@ -8,33 +8,20 @@
         "type": "tabs",
         "children": [
           {
-            "id": "c0d65000a3b479e7",
-            "type": "leaf",
-            "pinned": true,
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Chapter 16 Fearless Concurrency.md",
-                "mode": "source",
-                "source": false
-              },
-              "pinned": true
-            }
-          },
-          {
             "id": "7b400377c40f5ecb",
             "type": "leaf",
+            "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
                 "file": "Chapter 17 Object Oriented Programming Features of Rust.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "pinned": true
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -188,8 +175,9 @@
   },
   "active": "7288f68d39a8cadf",
   "lastOpenFiles": [
-    "Chapter 16 Fearless Concurrency.md",
     "Chapter 20 Final Project - Building a Multi-threaded Web Server.md",
+    "Chapter 17 Object Oriented Programming Features of Rust.md",
+    "Chapter 16 Fearless Concurrency.md",
     "Chapter 15 Smart Pointers.md",
     "Images/Reference_Count_MemoryLeak.png",
     "Chapter 5 Using Structs to Structure Related Data.md",
@@ -200,7 +188,6 @@
     "Chapter 2 Programming a Guessing Game.md",
     "Chapter 1 Intro.md",
     "Chapter 19 Advanced Features.md",
-    "Chapter 17 Object Oriented Programming Features of Rust.md",
     "Untitled.canvas",
     "Images/Art Crate Using Pub Use.png",
     "Images/Chapter15_Rc<T>Box_ShareDiagram.png",
