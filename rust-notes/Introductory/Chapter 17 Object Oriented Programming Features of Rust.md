@@ -282,7 +282,7 @@ This error lets us know that either we’re passing something to `Screen` we d
 
 ## Trait Objects Perform Dynamic Dispatch
 
-In the "Performance of Code Using Generics" section in [[Chapter 10 Generic Types, Traits, and Lifetimes]], our discussion on the monomorphization process performed by the compiler when we use trait bounds on generics; the compiler generates non-generic implementations of functions and methods for each concrete type that we use in place of a generic type parameter. The code that results from monomorphization is doing *static dispatch*: when the compiler knows what method you're calling at compile time
+In the [[Chapter 10 Generic Types, Traits, and Lifetimes#Performance of Code Using Generics|Performance of Code Using Generics]], our discussion on the monomorphization process performed by the compiler when we use trait bounds on generics; the compiler generates non-generic implementations of functions and methods for each concrete type that we use in place of a generic type parameter. The code that results from monomorphization is doing *static dispatch*: when the compiler knows what method you're calling at compile time
 
 This is opposed to *dynamic dispatch*: when the compiler can't tell at compile time which method you're calling. In dynamic dispatch cases, the compiler emits code that at runtime will figure out which method to call.
 
