@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "e2eb5ab6a6550446",
+        "id": "27420a5268f1e65b",
         "type": "tabs",
         "children": [
           {
-            "id": "7b400377c40f5ecb",
+            "id": "745f0627c9a0a1c3",
             "type": "leaf",
             "pinned": true,
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Chapter 17 Object Oriented Programming Features of Rust.md",
+                "file": "Chapter 18 Patterns and Matching.md",
                 "mode": "source",
                 "source": false
               },
@@ -22,11 +22,15 @@
             }
           },
           {
-            "id": "310163d12c966186",
+            "id": "b0b1f03c0e6b765e",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Chapter 17 Object Oriented Programming Features of Rust.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -58,7 +62,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "shadowing",
+                "query": "\"ref\"",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,12 +78,20 @@
               "type": "starred",
               "state": {}
             }
+          },
+          {
+            "id": "1069cd4c5fe0ea2c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 323.5
+    "width": 200
   },
   "right": {
     "id": "095e72d04d35ab74",
@@ -95,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Chapter 17 Object Oriented Programming Features of Rust.md",
+                "file": "Chapter 18 Patterns and Matching.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,7 +124,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Chapter 17 Object Oriented Programming Features of Rust.md",
+                "file": "Chapter 18 Patterns and Matching.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -135,7 +147,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Chapter 17 Object Oriented Programming Features of Rust.md"
+                "file": "Chapter 18 Patterns and Matching.md"
               }
             }
           },
@@ -168,7 +180,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 464.5
+    "width": 385.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -184,17 +196,23 @@
   "active": "7288f68d39a8cadf",
   "lastOpenFiles": [
     "Chapter 17 Object Oriented Programming Features of Rust.md",
+    "Chapter 18 Patterns and Matching.md",
     "Chapter 19 Advanced Features.md",
-    "Chapter 10 Generic Types, Traits, and Lifetimes.md",
     "Chapter 20 Final Project - Building a Multi-threaded Web Server.md",
-    "Chapter 16 Fearless Concurrency.md",
-    "Chapter 15 Smart Pointers.md",
-    "Images/Reference_Count_MemoryLeak.png",
     "Chapter 5 Using Structs to Structure Related Data.md",
-    "Chapter 4 Understanding Ownership.md",
-    "Chapter 8 Common Collections.md",
-    "Chapter 3 Common Programming Concepts.md",
+    "Chapter 7 Managing Growing Projects with Packages, Crates, and Modules.md",
+    "Chapter 15 Smart Pointers.md",
     "Chapter 6 Enums and Pattern Matching.md",
+    "Chapter 10 Generic Types, Traits, and Lifetimes.md",
+    "Chapter 13 Functional Language Features Iterators and Closures.md",
+    "Chapter 12 An IO Project - Building A command Line Program.md",
+    "Chapter 8 Common Collections.md",
+    "Chapter 11 Writing Automated Tests.md",
+    "Chapter 9 Error Handling.md",
+    "Chapter 16 Fearless Concurrency.md",
+    "Images/Reference_Count_MemoryLeak.png",
+    "Chapter 4 Understanding Ownership.md",
+    "Chapter 3 Common Programming Concepts.md",
     "Chapter 2 Programming a Guessing Game.md",
     "Chapter 1 Intro.md",
     "Untitled.canvas",
@@ -208,11 +226,7 @@
     "Images/cargo_doc_image_example.png",
     "Images/cargo_doc_crate_description.png",
     "Chapter 14 More about Cargo and Crates.Io.md",
-    "Chapter 18 Patterns and Matching.md",
-    "Chapter 13 Functional Language Features Iterators and Closures.md",
-    "Chapter 12 An IO Project - Building A command Line Program.md",
     "Untitled 1.canvas",
-    "Chapter 19 19. Advanced Features.md",
-    "Chapter 11 Writing Automated Tests.md"
+    "Chapter 19 19. Advanced Features.md"
   ]
 }

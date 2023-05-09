@@ -135,7 +135,7 @@ enum Message {
 This enum has 4 variants with different types:
 - `Quit` has no data associate with it at all
 - `Move` has named fields like a `struct`
-- `Write`includes a single `String`
+- `Write` includes a single `String`
 - `ChangeColor` includes three `i32` values.
 
 Defining an enum with variants such as the ones above is similar to defining different kinds of struct definitions, except the enum doesn’t use the `struct` keyword and all the variants are grouped together under the `Message` type. The following structs could hold the same data that the preceding enum variants hold:

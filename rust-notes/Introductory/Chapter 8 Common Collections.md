@@ -188,7 +188,7 @@ Rust has only one string type in the core language: the string slice `str` that 
 
 String Literals == String Slices
 
-The `String` type, which is provided by Rust's standard library rather than coded into the core language, is a growable, mutable, owned, UTF-8 encoded string type. Both `String` and string slices are UTF-8 encoded. 
+The `String` type, which is provided by Rust's standard library rather than coded into the core language, is a grow-able, mutable, owned, UTF-8 encoded string type. Both `String` and string slices are UTF-8 encoded. 
 
 ## Creating a New String
 
